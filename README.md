@@ -517,4 +517,87 @@ public class loginv2 extends JFrame {
                     repaint();
                 }
 
-                @Over
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    hover = true;
+                    repaint();
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    hover = false;
+                    repaint();
+                }
+            });
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            Color fill = hover ? new Color(60, 255, 170) : normalColor;
+            g2.setColor(fill);
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+
+            if (hover) {
+                g2.setColor(new Color(0, 255, 180, 55));
+                g2.setStroke(new BasicStroke(2f));
+                g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 14, 14);
+            }
+
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
+    // =========================================================
+    // GLOW BORDER
+    // =========================================================
+    class GlowBorder extends AbstractBorder {
+        private final Color color;
+        private final int thickness;
+        private final int radius;
+
+        GlowBorder(Color color, int thickness, int radius) {
+            this.color = color;
+            this.thickness = thickness;
+            this.radius = radius;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(thickness + 3, thickness + 8, thickness + 3, thickness + 8);
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c, Insets insets) {
+            insets.left = thickness + 8;
+            insets.right = thickness + 8;
+            insets.top = thickness + 3;
+            insets.bottom = thickness + 3;
+            return insets;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(color);
+            g2.setStroke(new BasicStroke(thickness));
+            g2.drawRoundRect(x + thickness / 2, y + thickness / 2,
+                    width - thickness, height - thickness, radius, radius);
+            g2.dispose();
+        }
+    }
+
+    // =========================================================
+    // MAIN
+    // =========================================================
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            loginv2 system = new loginv2();
+            system.setVisible(true);
+        });
+    }
+                
